@@ -2,6 +2,6 @@ import uvicorn
 
 
 uvicorn.run(
-    'workshop.app:app',
+    'healthcheck.app:app',
     reload=True
 )
