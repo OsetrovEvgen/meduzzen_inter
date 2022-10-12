@@ -1,29 +1,41 @@
 version: '3.8'
 
 services:
-  web:
+  api:
     build: .
-    container_name: Test_Web
-    volumes:
-      - .:/app
+    container_name: api
     ports:
-      - 8000:8000
-    environment:
-      - DATABASE_URL=postgresql://fastapi_traefik:fastapi_traefik@db:5432/fastapi_traefik
+      - ${SERVER_PORT}:${SERVER_PORT}
     depends_on:
-      - db_postgres
-    entrypoint: ["uvicorn", "app:app", "--port", "8000", "--host", "0.0.0.0"]
-  db_postgres:
-    image: postgres:13-alpine
-    container_name: DB_pg
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    expose:
-      - 5432
-    environment:
-      - POSTGRES_USER=fastapi_traefik
-      - POSTGRES_PASSWORD=fastapi_traefik
-      - POSTGRES_DB=fastapi_traefik
+      - postgres
+      - redis
+    entrypoint: ["python3", "main.py"]
+    networks:
+      - net
 
-volumes:
-  postgres_data:
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - net
+
+  redis:
+    image: redis
+    container_name: redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge

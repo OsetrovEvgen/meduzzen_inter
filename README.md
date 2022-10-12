@@ -4,6 +4,5 @@
 pip install -r requirements.txt
 cd src && python -m healthcheck
 
-sudo docker build -t img . 
-sudo docker run -d -t --name img -p 8000:8000 img
+docker-compose --env-file src/.env up -d
 ```
