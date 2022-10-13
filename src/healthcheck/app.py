@@ -1,15 +1,7 @@
-from fastapi import FastAPI
-from typing import Union
+from fastapi import APIRouter
 
+router = APIRouter(prefix="", tags=["Health"])
 
-app = FastAPI()
-
-
-@app.get('/')
-def root():
-    return {"status": "Working"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@router.get("/health-check")
+def health_check():
+    return {"status": "OK"}
