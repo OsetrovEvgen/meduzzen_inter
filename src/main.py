@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 import uvicorn
 from redis import Redis
-from .config import settings
+from config import settings
 from sqlalchemy import create_engine
-from .connection import create_redis_connection, create_postgres_connection
+from connection import create_redis_connection, create_postgres_connection
 
 
 from healthcheck.app import router
