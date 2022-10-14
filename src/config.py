@@ -1,9 +1,15 @@
 from pydantic import BaseSettings, SecretStr
+from starlette.config import Config
+
+
+config = Config('.env')
+
+DATABASE_URL = config('MED_DATABASE_URL', cast=str, default='')
 
 
 class Settings(BaseSettings):
     class Config:
-        env_file = '.env'
+        env_file = '../.env'
 
     SERVER_PORT: int
     SERVER_HOST: str

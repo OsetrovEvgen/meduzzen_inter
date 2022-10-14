@@ -1,4 +1,4 @@
-from redis import Redis
+import redis
 from sqlalchemy import create_engine
 from config import settings
 
@@ -16,8 +16,5 @@ async def create_postgres_connection():
 
 
 async def create_redis_connection():
-    if Redis(host=settings.REDIS_HOST,
-        port=settings.REDIS_PORT,
-        password=settings.REDIS_PASSWORD).ping():
-        print("Redis connection accomplished")
+    return redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
