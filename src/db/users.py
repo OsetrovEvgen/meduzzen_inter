@@ -13,6 +13,3 @@ users = sqlalchemy.Table('users',
                          sqlalchemy.Column('created_at', sqlalchemy.DateTime, default=datetime.datetime.utcnow),
                          sqlalchemy.Column('updated_at', sqlalchemy.DateTime, default=datetime.datetime.utcnow),
                          )
-
-
-

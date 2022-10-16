@@ -1,5 +1,4 @@
 from pydantic import BaseSettings, SecretStr
-from starlette.config import Config
 
 
 class Settings(BaseSettings):
