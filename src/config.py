@@ -3,7 +3,7 @@ from pydantic import BaseSettings, SecretStr
 
 class Settings(BaseSettings):
     class Config:
-        env_file = '.env'
+        env_file = '../.env'
 
     SERVER_PORT: int
     SERVER_HOST: str

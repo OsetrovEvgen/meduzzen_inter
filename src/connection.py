@@ -1,3 +1,4 @@
+import redis
 from redis import Redis
 from sqlalchemy import create_engine
 from config import settings
@@ -20,4 +21,3 @@ async def create_redis_connection():
         port=settings.REDIS_PORT,
         password=settings.REDIS_PASSWORD).ping():
         print("Redis connection accomplished")
-
