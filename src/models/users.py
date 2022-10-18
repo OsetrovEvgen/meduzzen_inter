@@ -16,7 +16,7 @@ class UserInput(BaseModel):
     email: EmailStr
     password: str
     password2: str
-    is_company: bool
+    is_company: bool = False
 
     @validator('password')
     def password_math(self, cls, v, values, **kwargs):
