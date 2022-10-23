@@ -1,10 +1,10 @@
 import datetime
 from typing import List, Optional
 from .base import BaseRepository
-from ..db import users
+from db import users
 from typing import List
-from ..models.users import User, UserInput
-from ..security import hashed_password
+from models.users import User, UserInput
+from security import hashed_password
 
 
 class UserRepository(BaseRepository):
@@ -35,15 +35,15 @@ class UserRepository(BaseRepository):
         user.id = await self.database.execute(query)
         return user
 
-    async def update(self, id: int, u: UserInput) ->User:
+    async def update(self, id: int, u: UserInput) -> User:
         user = User(
-            id = id,
-            name = u.name,
-            email = u.email,
-            hashed_password = hashed_password(u.password),
-            is_company = u.is_company,
-            created_at = datetime.datetime.utcnow(),
-            updated_at = datetime.datetime.utcnow()
+            id=id,
+            name=u.name,
+            email=u.email,
+            hashed_password=hashed_password(u.password),
+            is_company=u.is_company,
+            created_at=datetime.datetime.utcnow(),
+            updated_at=datetime.datetime.utcnow()
         )
 
         values = {**user.dict()}
@@ -53,7 +53,7 @@ class UserRepository(BaseRepository):
         await self.database.execute(query)
         return user
 
-    async def get_by_email(self, email: str) ->Optional[User]:
+    async def get_by_email(self, email: str) -> Optional[User]:
         query = users.select().where(users.c.email==email)
         user = await self.database.fetch_one(query)
         if user is None:

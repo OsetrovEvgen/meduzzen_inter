@@ -8,8 +8,10 @@ class User(BaseModel):
     name: str
     email: EmailStr
     hashed_password: str
+    is_company: bool
     created_at: datetime.datetime
     updated_at: datetime.datetime
+
 
 class UserInput(BaseModel):
     name: str
@@ -18,8 +20,8 @@ class UserInput(BaseModel):
     password2: str
     is_company: bool = False
 
-    @validator('password')
-    def password_math(self, cls, v, values, **kwargs):
+    @validator('password2')
+    def password_math(cls, v, values, **kwargs):
         if 'password' in values and v != values['password']:
             raise ValueError('Error password')
         return v
