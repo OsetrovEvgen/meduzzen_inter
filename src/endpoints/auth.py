@@ -6,7 +6,7 @@ from security import verify_password, hashed_password, create_access_token
 
 router = APIRouter()
 
-@router.post('/', response_model=Token, )
+@router.post('/', response_model=Token)
 async def login(login:Login, users: UserRepository = Depends(get_users_repository)) ->Token:
     user = users.get_by_email(login.email)
     if user is None or not verify_password(login.password, user.hashed_password):
