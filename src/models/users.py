@@ -5,12 +5,12 @@ from pydantic import BaseModel, EmailStr, validator
 
 class User(BaseModel):
     id: Optional[str] = None
-    name: str
-    email: EmailStr
-    hashed_password: str
-    is_company: bool
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
+    name: str = None
+    email: EmailStr = None
+    hashed_password: str = None
+    is_company: bool = None
+    created_at: datetime.datetime = None
+    updated_at: datetime.datetime = None
 
 
 class UserInput(BaseModel):

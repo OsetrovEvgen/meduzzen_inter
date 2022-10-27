@@ -1,62 +1,77 @@
 import datetime
 from typing import List, Optional
-from .base import BaseRepository
-from db import users
-from typing import List
-from models.users import User, UserInput
 from security import hashed_password
+from .base import BaseRepository
+from db.users import User
+from typing import List
+from models.users import User as UserModel, UserInput
+from sqlalchemy import update
 
 
 class UserRepository(BaseRepository):
-    async def get_all(self, limit: int=20, skip: int=0) -> List[User]:
-        query = users.select().limit(limit).offset(skip)
-        return await self.database.fetch_all(query=query)
+    async def get_all(self, limit: int = 20, page: int = 0) -> List[User]:
+        res_users = []
+        db_users = self.session.query(User).limit(limit).offset(page).all()
+        for u in db_users:
+            res_users.append(UserModel.parse_obj(u.__dict__))
+        return res_users
 
-    async def get_by_id(self, id: int) -> Optional[User]:
-        query = users.select().where(users.c.id==id)
-        user = await self.database.fetch_one(query)
-        if user is None:
-            return None
-        return User.parse_obj(user)
+    async def get_by_id(self, id: int) -> List[User]:
+        res_users = []
+        db_users = self.session.query(User.select()).where(User.c.id==id)
+        if User is None:
+            return []
+        else:
+            for u in db_users:
+                res_users.append(UserModel.parse_obj(u.__dict__))
+            return res_users
 
-    async  def create(self, u: UserInput) -> User:
+    async def create(self, u: UserInput):
+        res_users = []
         user = User(
             name = u.name,
             email = u.email,
             hashed_password = hashed_password(u.password),
             is_company = u.is_company,
             created_at = datetime.datetime.utcnow(),
-            updated_at = datetime.datetime.utcnow()
         )
-
         values = {**user.dict()}
         values.pop('id', None)
-        query = users.insert().values(**values)
-        user.id = await self.database.execute(query)
-        return user
+        users = self.session.query(user.insert().values(**values))
+        self.session.add(users)
+        db_users = self.session.query(User.select()).where(User.c.user==user)
+        for u in db_users:
+            res_users.append(UserModel.parse_obj(u.__dict__))
+        return res_users
 
-    async def update(self, id: int, u: UserInput) -> User:
+    async def update(self, id: int, u: UserInput):
+        res_users = []
         user = User(
-            id=id,
-            name=u.name,
-            email=u.email,
-            hashed_password=hashed_password(u.password),
-            is_company=u.is_company,
-            created_at=datetime.datetime.utcnow(),
-            updated_at=datetime.datetime.utcnow()
+            name = u.name,
+            email = u.email,
+            hashed_password = hashed_password(u.password),
+            is_company = u.is_company,
+            created_at = datetime.datetime.utcnow(),
+            updated_att=datetime.datetime.utcnow()
         )
-
         values = {**user.dict()}
         values.pop('created_at', None)
         values.pop('id', None)
-        query = users.update().where(users.c.id==id).values(**values)
-        await self.database.execute(query)
-        return user
+        users = self.session.query(user.insert().values(**values))
+        self.session.update(users)
+        db_users =self.session.update(User.updated_at()).where(User.c.user==user)
+        # db_users = self.session.query(User.select()).where(User.c.user==user)
+        for u in db_users:
+            res_users.append(UserModel.parse_obj(u.__dict__))
+        return res_users
 
-    async def get_by_email(self, email: str) -> Optional[User]:
-        query = users.select().where(users.c.email==email)
-        user = await self.database.fetch_one(query)
-        if user is None:
-            return None
-        return User.parse_obj(user)
+    async def get_by_email(self, email: str) -> List[User]:
+        res_users = []
+        db_users = self.session.query(User.select()).where(User.c.email==email)
+        if User is None:
+            return []
+        else:
+            for u in db_users:
+                res_users.append(UserModel.parse_obj(u.__dict__))
+            return res_users
 
