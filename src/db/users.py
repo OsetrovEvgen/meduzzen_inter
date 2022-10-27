@@ -10,7 +10,7 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
     id = Column('id', sqlalchemy.Integer, primary_key=True, autoincrement=True, unique=True)
-    email = Column('email', sqlalchemy.String, primary_key=True, unique=True)
+    email = Column('email', sqlalchemy.String, unique=True)
     name = Column('name', sqlalchemy.String)
     hashed_password = Column('hashed_password', sqlalchemy.String)
     is_company = Column('is_company', sqlalchemy.Boolean)

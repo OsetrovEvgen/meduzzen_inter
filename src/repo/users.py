@@ -1,5 +1,7 @@
 import datetime
 from typing import List, Optional
+
+import models.users
 from security import hashed_password
 from .base import BaseRepository
 from db.users import User
@@ -18,7 +20,7 @@ class UserRepository(BaseRepository):
 
     async def get_by_id(self, id: int) -> List[User]:
         res_users = []
-        db_users = self.session.query(User.select()).where(User.c.id==id)
+        db_users = self.session.query(User).get(id)
         if User is None:
             return []
         else:
@@ -35,10 +37,11 @@ class UserRepository(BaseRepository):
             is_company = u.is_company,
             created_at = datetime.datetime.utcnow(),
         )
-        values = {**user.dict()}
+        values = {**user.__dict__}
         values.pop('id', None)
-        users = self.session.query(user.insert().values(**values))
-        self.session.add(users)
+        # users = UserInput(values)
+        # users = self.session.query(user.().values(**values))
+        # self.session.add(user)
         db_users = self.session.query(User.select()).where(User.c.user==user)
         for u in db_users:
             res_users.append(UserModel.parse_obj(u.__dict__))
@@ -60,7 +63,6 @@ class UserRepository(BaseRepository):
         users = self.session.query(user.insert().values(**values))
         self.session.update(users)
         db_users =self.session.update(User.updated_at()).where(User.c.user==user)
-        # db_users = self.session.query(User.select()).where(User.c.user==user)
         for u in db_users:
             res_users.append(UserModel.parse_obj(u.__dict__))
         return res_users

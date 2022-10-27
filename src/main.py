@@ -16,7 +16,8 @@ def create_application() -> FastAPI:
 app = create_application()
 app.include_router(users.router, prefix='/users', tags=['users'])
 app.include_router(auth.router, prefix='/auth', tags=['auth'])
-app.include_router(users_id.router, prefix='/users_id', tags=['users_id'])
+# app.include_router(users_id.router, prefix='/users_id', tags=['users_id'])
+# app.include_router(users.router, prefix='/users_id', tags=['users_id'])
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host=settings.SERVER_HOST, port=settings.SERVER_PORT, reload=True)
