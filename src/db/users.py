@@ -18,8 +18,7 @@ class User(Base):
     updated_at = Column('updated_at', sqlalchemy.DateTime, default=datetime.datetime.utcnow)
 
     def __repr__(self):
-        return "<User(name='%s', fullname='%s', nickname='%s')>" % (
+        return "<User(name='%s', email='%s')>" % (
             self.name,
-            self.fullname,
-            self.nickname,
+            self.email,
         )
