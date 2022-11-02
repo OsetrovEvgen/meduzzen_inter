@@ -18,4 +18,6 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str
     POSTGRES_DB: str
 
+    SECRET_KEY:str
+
 settings = Settings()
