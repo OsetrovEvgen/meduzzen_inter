@@ -51,6 +51,7 @@ class UserRepository(BaseRepository):
         # values.pop('id', None)
         users = self.session.query(user.insert().values(**values))
         self.session.update(users)
+        self.session.commit()
         db_users = self.session.update(User.updated_at()).where(User.c.user == user)
         return [UserModel.parse_obj(u.__dict__) for u in db_users]
 

@@ -7,7 +7,7 @@ from models.users import UserInput, User
 router = APIRouter()
 
 
-@router.post('')
+@router.post('/create user')
 async def create_users(u: UserInput, users: UserRepository = Depends(get_users_repository)):
     try:
         return await users.create(u)
@@ -15,7 +15,7 @@ async def create_users(u: UserInput, users: UserRepository = Depends(get_users_r
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invalid data fetched')
 
 
-@router.get('')
+@router.get('/get user')
 async def read_all_users(email: str = "", users: UserRepository = Depends(get_users_repository), limit: int = 100, page: int = 100):
     try:
         if email != "" and not None:
@@ -33,7 +33,7 @@ async def read_users_by_id(id: int, users: UserRepository = Depends(get_users_re
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
 
 
-@router.put('')
+@router.put('/update user')
 async def update_users(id: int, users: UserRepository = Depends(get_users_repository)):
     try:
         return users.update(id=id)
