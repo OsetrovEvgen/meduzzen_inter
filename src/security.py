@@ -1,4 +1,6 @@
 import datetime
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Request, HTTPException, status
 from passlib.context import CryptContext
 from jose import jwt
 from db.base import ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY, ALGORITHM
@@ -27,3 +29,21 @@ def decode_access_token(token: str):
     except jwt.JWSError:
         return None
     return encoded_jwt
+
+
+class JWTBearer(HTTPBearer):
+    def __int__(self, auto_error: bool = True):
+        super(JWTBearer, self).__init__(auto_error=auto_error)
+
+    async def __call__(self, request: Request):
+        credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
+        exp = HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Invalis auth token')
+        if credentials:
+            token = decode_access_token(credentials.credentials)
+            if token is None:
+                raise exp
+            return credentials.credentials
+        else:
+            return exp
+
+

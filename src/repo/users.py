@@ -16,7 +16,7 @@ class UserRepository(BaseRepository):
         db_users = self.session.query(User).limit(limit).offset(page).all()
         return [UserModel.parse_obj(u.__dict__) for u in db_users]
 
-    async def get_by_id(self, id: int) -> List[User]:
+    async def get_by_id(self, id: int) -> List[UserModel]:
         res_users = []
         db_users = self.session.query(User).get(id)
         if User is None:
@@ -48,7 +48,6 @@ class UserRepository(BaseRepository):
             updated_att=datetime.datetime.utcnow()
         )
         values = {**user.__dict__}
-        # values.pop('id', None)
         users = self.session.query(user.insert().values(**values))
         self.session.update(users)
         self.session.commit()
