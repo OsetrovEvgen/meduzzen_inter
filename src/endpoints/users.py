@@ -43,7 +43,14 @@ async def update_users(id: int,
                        u: UserInput,
                        users_repo: UserRepository = Depends(get_users_repository),
                        current_user: User = Depends(get_current_user)):
+    print(current_user)
+    print(id)
+    print(current_user.id)
+    print(id is current_user.id)
+    print(type(id))
+    print(type(current_user.id))
     if id == current_user.id:
+        print('!')
         return users_repo.update(id=id, u=u)
     else:
         return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')

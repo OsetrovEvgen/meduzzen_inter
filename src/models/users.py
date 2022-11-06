@@ -4,7 +4,7 @@ from pydantic import BaseModel, EmailStr, validator
 
 
 class User(BaseModel):
-    id: Optional[str] = None
+    id: Optional[int] = None
     name: str = None
     email: EmailStr = None
     hashed_password: str = None
