@@ -6,7 +6,6 @@ from security import verify_password, create_access_token
 
 router = APIRouter()
 
-
 @router.post('/', response_model=Token)
 async def login(login: Login, users: UserRepository = Depends(get_users_repository)) ->Token:
     user = await users.get_by_email(login.email)
