@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str
     POSTGRES_DB: str
 
-    SECRET_KEY:str
+    MED_DATABASE_URL: str
+    MED_SECRET_KEY: str
+    MED_ALEMBIC: str
+
 
 settings = Settings()
